@@ -1,6 +1,8 @@
 package models
 
 import (
+	"errors"
+	"fmt"
 	"time"
 )
 
@@ -19,4 +21,29 @@ type Answer struct {
 
 func (this *Answer) Valid() bool {
 	return (this.Question.QuestionId != 0 && len(this.Text) > 2 && this.Author.UserId != 0)
+}
+
+func (this *Answer) SetId(id int) {
+	this.AnswerId = id
+}
+
+func (this *Answer) String() string {
+	return fmt.Sprintf("%s's answer to %s", this.Author, this.Question)
+}
+
+// CRUD operations
+
+// Add creates new answer
+func (this *Answer) Add() (bool, error) {
+	if !this.Valid() {
+		return false, errors.New("Incomplete fields")
+	}
+	saved, err := SaveItem(this)
+	if err != nil {
+		return false, err
+	}
+	if !saved {
+		return false, errors.New("Failed to save this answer")
+	}
+	return true, nil
 }
