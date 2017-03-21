@@ -2,7 +2,7 @@ package models
 
 import (
 	"errors"
-	"fmt"
+	"strings"
 	"time"
 
 	"github.com/boolow5/bolow/encrypt"
@@ -50,10 +50,9 @@ func (this *User) Add() (bool, error) {
 
 // Update chenges the modified fields of the object and ignores the emtpy ones.
 func (this *User) Update() (bool, error) {
-	fmt.Println("Updating user")
+
 	if this.UserId < 1 {
 		err_message := "ZeroIDError: give a valid id, to update this item"
-		fmt.Println(err_message)
 		return false, errors.New(err_message)
 	}
 	this.UpdatedAt = time.Now()
@@ -61,15 +60,12 @@ func (this *User) Update() (bool, error) {
 	oldItem.Profile = this.Profile
 	updated, err := UpdateItem(oldItem, this)
 	if err != nil {
-		fmt.Println(err)
 		return false, err
 	}
-	fmt.Println("Updated user = ", this)
 	if !updated {
 		return false, nil
 	}
 
-	fmt.Println("Updated successfully")
 	return true, nil
 }
 
@@ -107,7 +103,6 @@ func (this *User) Authenticate() (error, *User) {
 
 	err, user := GetUserByUsername(this.Username)
 	if err != nil {
-		fmt.Println(err)
 		return err, this
 	}
 	if user.Password == "" {
@@ -125,4 +120,16 @@ func (this *User) Authenticate() (error, *User) {
 	}
 	user.Password = "[hidden-for-security-reasons]"
 	return nil, user
+}
+
+func (this *User) Authorize(role string) (bool, error) {
+	err, user := GetUserByUsername(this.Username)
+	if err != nil {
+		return false, err
+	}
+
+	if strings.ToLower(user.Role) != strings.ToLower(role) {
+		return false, errors.New("You're not authorized, because your role is not " + role)
+	}
+	return true, nil
 }
