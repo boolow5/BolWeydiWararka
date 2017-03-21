@@ -19,7 +19,6 @@ type MyModel interface {
 }
 
 func init() {
-	fmt.Println("initializing models...")
 
 	// REGISTER DRIVERS & DATABASES:
 	/*// MYSQL
@@ -30,7 +29,7 @@ func init() {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", "data.db")
 
-	orm.RegisterModel(new(User), new(Profile), new(Question), new(Answer), new(Discussion))
+	orm.RegisterModel(new(User), new(Profile), new(Question), new(Answer), new(Discussion), new(Topic))
 
 	if g.AUTO_MIGRATE {
 		name := "default"                          // Database alias.
