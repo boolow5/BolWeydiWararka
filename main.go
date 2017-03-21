@@ -22,10 +22,10 @@ func main() {
 			c.JSON(200, gin.H{"message": "Welcome you're authorized to see this!"})
 		})
 	}
-	router.GET("/user", controllers.AddUser)
-	router.GET("/update", controllers.UpdateUser)
-	router.GET("/delete", controllers.DeleteUser)
-	router.GET("/auth", controllers.AuthenticateUser)
+	router.POST("/user", controllers.AddUser)
+	router.PUT("/user", controllers.UpdateUser)
+	router.DELETE("/user", controllers.DeleteUser)
+	//router.POST("/auth", controllers.AuthenticateUser)
 
 	router.POST("/login", jwtMiddleware.LoginHandler)
 
