@@ -1,15 +1,13 @@
 package controllers
 
 import (
-	"fmt"
-
 	"github.com/boolow5/BolWeydi/models"
 
 	"gopkg.in/gin-gonic/gin.v1"
 )
 
 func init() {
-	fmt.Println("initializing controllers...")
+
 }
 
 func Index(context *gin.Context) {
@@ -19,31 +17,47 @@ func Index(context *gin.Context) {
 // Auth Controllers
 func AddUser(context *gin.Context) {
 	user := models.User{}
-	var err_message string
-	var saved bool
-	user.Username = "boolow5"
-	err := user.SetPassword("sharaf.143")
-	if err == nil {
-		user.Role = "admin"
-		user.Profile = &models.Profile{FirstName: "Mahdi", MiddleName: "Ahmed", LastName: "Bolow", AnswerCount: 100, AnswerViewCount: 3545}
-		saved, err = user.Add()
-	}
+
+	context.BindJSON(&user)
+	err := user.SetPassword(user.Password)
 	if err != nil {
-		err_message = err.Error()
+		context.JSON(200, gin.H{"error": err.Error()})
+		return
+	}
+	if user.Profile == nil {
+		user.Profile = &models.Profile{FirstName: user.Username}
+	}
+	var saved bool
+	saved, err = user.Add()
+	if err != nil {
+		context.JSON(200, gin.H{"error": err.Error()})
+		return
 	}
 
-	context.JSON(200, gin.H{"user": user, "saved": saved, "error": err_message})
+	if !saved {
+		context.JSON(200, gin.H{"warning": "failed without warning"})
+	}
+
+	context.JSON(200, gin.H{"success": "Saved successfully"})
 }
 
 func UpdateUser(context *gin.Context) {
 	_, user := models.GetUserById(1)
-	user.Username = "mahdiyare"
-	saved, err := user.Update()
-	var err_message string
+	err := context.BindJSON(&user)
 	if err != nil {
-		err_message = err.Error()
+		context.JSON(200, gin.H{"error": err.Error()})
+		return
 	}
-	context.JSON(200, gin.H{"saved": saved, "error": err_message})
+	saved, err := user.Update()
+	if err != nil {
+		context.JSON(200, gin.H{"error": err.Error()})
+		return
+	}
+	if !saved {
+		context.JSON(200, gin.H{"warning": "update failed without error"})
+		return
+	}
+	context.JSON(200, gin.H{"success": "updated successfully"})
 }
 
 func DeleteUser(context *gin.Context) {
