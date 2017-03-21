@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -44,5 +45,28 @@ func (this *Comment) Add() (bool, error) {
 	if !saved {
 		return false, errors.New("Failed to save this comment")
 	}
+	return true, nil
+}
+
+func (this *Comment) Update() (bool, error) {
+	fmt.Println("Updating Comment")
+	if this.CommentId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		fmt.Println(err_message)
+		return false, errors.New(err_message)
+	}
+	this.UpdatedAt = time.Now()
+	oldItem := &Comment{CommentId: this.CommentId}
+	updated, err := UpdateItem(oldItem, this)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	if !updated {
+		return false, nil
+	}
+
+	fmt.Println("Updated successfully")
 	return true, nil
 }

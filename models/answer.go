@@ -47,3 +47,27 @@ func (this *Answer) Add() (bool, error) {
 	}
 	return true, nil
 }
+
+func (this *Answer) Update() (bool, error) {
+	fmt.Println("Updating answer")
+	if this.AnswerId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		fmt.Println(err_message)
+		return false, errors.New(err_message)
+	}
+	this.UpdatedAt = time.Now()
+	oldItem := &Answer{AnswerId: this.AnswerId}
+	oldItem.Question = this.Question
+	updated, err := UpdateItem(oldItem, this)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	if !updated {
+		return false, nil
+	}
+
+	fmt.Println("Updated successfully")
+	return true, nil
+}

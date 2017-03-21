@@ -59,3 +59,27 @@ func (this *Reaction) Add() (bool, error) {
 	}
 	return true, nil
 }
+
+func (this *Reaction) Update() (bool, error) {
+	fmt.Println("Updating Reaction")
+	if this.ReactionId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		fmt.Println(err_message)
+		return false, errors.New(err_message)
+	}
+	this.UpdatedAt = time.Now()
+	oldItem := &Reaction{ReactionId: this.ReactionId}
+	oldItem.Question = this.Question
+	updated, err := UpdateItem(oldItem, this)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	if !updated {
+		return false, nil
+	}
+
+	fmt.Println("Updated successfully")
+	return true, nil
+}

@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"time"
 )
@@ -24,4 +25,27 @@ func (this *Discussion) SetId(id int) {
 
 func (this *Discussion) String() string {
 	return fmt.Sprintf("discussion about %v held by %v", this.Topics, this.Guests)
+}
+
+func (this *Discussion) Update() (bool, error) {
+	fmt.Println("Updating Discussion")
+	if this.DiscussionId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		fmt.Println(err_message)
+		return false, errors.New(err_message)
+	}
+
+	oldItem := &Discussion{DiscussionId: this.DiscussionId}
+	updated, err := UpdateItem(oldItem, this)
+	if err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	if !updated {
+		return false, nil
+	}
+
+	fmt.Println("Updated successfully")
+	return true, nil
 }
