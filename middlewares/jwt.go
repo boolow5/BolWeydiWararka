@@ -3,6 +3,7 @@ package middlewares
 import (
 	"time"
 
+	"github.com/boolow5/BolWeydi/models"
 	jwt "gopkg.in/appleboy/gin-jwt.v2"
 	"gopkg.in/gin-gonic/gin.v1"
 )
@@ -29,19 +30,26 @@ func NewJWTMiddleware() *jwt.GinJWTMiddleware {
 	}
 }
 
-func MyAuthenticator(userId string, password string, c *gin.Context) (string, bool) {
-	if (userId == "admin" && password == "admin") || (userId == "test" && password == "test") {
-		return userId, true
+func MyAuthenticator(username string, password string, c *gin.Context) (string, bool) {
+	user := &models.User{Username: username, Password: password}
+	err, user := user.Authenticate()
+	if err != nil {
+		return "", false
 	}
 
-	return userId, false
+	return user.Username, true
 }
 func MyAuthorizor(userId string, c *gin.Context) bool {
-	if userId == "admin" {
-		return true
+	user := models.User{Username: userId}
+	allow, err := user.Authorize("admin")
+	if err != nil {
+		return false
+	}
+	if !allow {
+		return false
 	}
 
-	return false
+	return true
 }
 
 func GetOUT(c *gin.Context, code int, message string) {
