@@ -3,12 +3,14 @@ package models
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
 type Question struct {
 	QuestionId  int         `json:"question_id" orm:"auto"`
 	Text        string      `json:"text" orm:"size(200)"`
+	UniqueUrl   string      `json:"unique_url" orm:"unique"`
 	Description string      `json:"description" orm:"size(500)"`
 	Author      *User       `json:"author" orm:"rel(fk);on_delete(cascade)"`
 	Discussion  *Discussion `json:"discussion" orm:"rel(fk);null;on_delete(set_null)"`
@@ -22,6 +24,9 @@ type Question struct {
 }
 
 func (this *Question) Valid() bool {
+	if len(this.Text) > 0 {
+		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)
+	}
 	return (len(this.Text) > 2 && this.Author.UserId != 0)
 }
 

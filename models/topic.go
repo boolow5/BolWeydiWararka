@@ -3,12 +3,14 @@ package models
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
 type Topic struct {
 	TopicId       int       `json:"topic_id" orm:"auto"`
 	Text          string    `json:"text" orm:"size(2000)"`
+	UniqueUrl     string    `json:"unique_url" orm:"unique"`
 	ParentTopicId int       `json:"parent_topic_id" orm:"null"`
 	ViewsCount    int       `json:"views_count" `
 	Followers     []*User   `json:"followers" orm:"rel(m2m)"`
@@ -17,6 +19,9 @@ type Topic struct {
 }
 
 func (this *Topic) Valid() bool {
+	if len(this.Text) > 0 {
+		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)
+	}
 	return len(this.Text) > 1
 }
 

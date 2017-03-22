@@ -3,12 +3,14 @@ package models
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
 type Comment struct {
 	CommentId int       `json:"discussion_id" orm:"auto"`
 	Text      string    `json:"text" orm:"size(500)"`
+	UniqueUrl string    `json:"unique_url" orm:"unique"`
 	Author    *User     `json:"author" orm:"rel(fk);on_delete(cascade)"`
 	Question  *Question `json:"question" orm:"rel(fk);null;on_delete(cascade)"`
 	Answer    *Answer   `json:"answer" orm:"rel(fk);null;on_delete(cascade)"`
@@ -20,6 +22,9 @@ type Comment struct {
 }
 
 func (this *Comment) Valid() bool {
+	if len(this.Text) > 0 {
+		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)
+	}
 	return (this.Author.UserId != 0 && this.Question.QuestionId != 0) || (this.Author.UserId != 0 && this.Answer.AnswerId != 0)
 }
 
