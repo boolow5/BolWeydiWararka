@@ -21,8 +21,8 @@ func init() {
 	table = []map[string]interface{}{
 		{"method": http.MethodPost, "expected_code": http.StatusOK, "url": "/user", "body": strings.NewReader(`{"username":"lajecleey5", "password":"jiijo143"}`), "expected": map[string]interface{}{"message": "Welcome to iWeydi"}},
 		{"method": http.MethodPost, "expected_code": http.StatusOK, "url": "/login", "body": strings.NewReader(`{"username":"lajecleey5", "password":"jiijo143"}`), "expected": map[string]interface{}{"expire": "", "token": ""}},
-		{"method": http.MethodPut, "expected_code": http.StatusOK, "url": "/user", "body": strings.NewReader(`{"password":"mahdi143"}`), "expected": map[string]interface{}{"message": "Update succeeded"}},
-		{"method": http.MethodDelete, "expected_code": http.StatusOK, "url": "/user", "expected": map[string]interface{}{"success": "Update successfully"}},
+		{"method": http.MethodPut, "expected_code": http.StatusOK, "url": "/user?user_id=1", "body": strings.NewReader(`{"password":"mahdi143"}`), "expected": map[string]interface{}{"message": "Update succeeded"}},
+		{"method": http.MethodDelete, "expected_code": http.StatusOK, "url": "/user?user_id=1", "expected": map[string]interface{}{"success": "Update successfully"}},
 	}
 }
 
