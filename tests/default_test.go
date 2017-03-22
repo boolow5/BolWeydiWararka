@@ -83,6 +83,7 @@ func TestAddUser(t *testing.T) {
 	}
 	// Unmarshal the response body
 	var responseJson map[string]interface{}
+	fmt.Println(rec.Body.String())
 	json.Unmarshal(rec.Body.Bytes(), &responseJson)
 	// check response body
 	if fmt.Sprintf("%v", responseJson) == fmt.Sprintf("%v", test["expected"]) {
@@ -120,6 +121,7 @@ func TestAuth(t *testing.T) {
 		t.Fatalf("Expected to get status %d but instead got %d\n", test["expected_code"], rec.Code)
 	}
 	// Unmarshal the response body
+	fmt.Println(rec.Body.String())
 	var responseJson map[string]interface{}
 	json.Unmarshal(rec.Body.Bytes(), &responseJson)
 	// check response body
@@ -154,6 +156,7 @@ func TestUpdateUser(t *testing.T) {
 		t.Fatalf("Expected to get status %d but instead got %d\n", test["expected_code"], rec.Code)
 	}
 	// Unmarshal the response body
+	fmt.Println(rec.Body.String())
 	var responseJson map[string]interface{}
 	json.Unmarshal(rec.Body.Bytes(), &responseJson)
 	// check response body
@@ -188,6 +191,7 @@ func TestDeleteUser(t *testing.T) {
 		t.Fatalf("Expected to get status %d but instead got %d\n", test["expected_code"], rec.Code)
 	}
 	// Unmarshal the response body
+	fmt.Println(rec.Body.String())
 	var responseJson map[string]interface{}
 	json.Unmarshal(rec.Body.Bytes(), &responseJson)
 	// check response body
