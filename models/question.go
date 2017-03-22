@@ -27,7 +27,7 @@ func (this *Question) Valid() bool {
 	if len(this.Text) > 0 {
 		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)
 	}
-	return (len(this.Text) > 2 && this.Author.UserId != 0)
+	return (len(this.Text) > 2 /*&& this.Author.UserId != 0*/)
 }
 
 func (this *Question) SetId(id int) {
@@ -56,7 +56,6 @@ func (this *Question) Add() (bool, error) {
 }
 
 func (this *Question) Update() (bool, error) {
-	fmt.Println("Updating Question")
 	if this.QuestionId < 1 {
 		err_message := "ZeroIDError: give a valid id, to update this item"
 		fmt.Println(err_message)
@@ -75,5 +74,19 @@ func (this *Question) Update() (bool, error) {
 	}
 
 	fmt.Println("Updated successfully")
+	return true, nil
+}
+
+func (this *Question) Delete() (bool, error) {
+	if this.QuestionId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		fmt.Println(err_message)
+		return false, errors.New(err_message)
+	}
+
+	if deleted, err := DeleteItem(this); err != nil || !deleted {
+		return deleted, err
+	}
+
 	return true, nil
 }
