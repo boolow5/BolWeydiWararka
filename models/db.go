@@ -68,6 +68,17 @@ func GetItems(itemArray []MyModel) []MyModel {
 	return itemArray
 }
 
+func GetQuestionById(item *Question) (*Question, error) {
+	if item.QuestionId < 1 {
+		return item, errors.New("Invalid question id")
+	}
+	err := o.Read(item)
+	if err != nil {
+		return item, err
+	}
+	return item, nil
+}
+
 // GetOneItem fetchs a single item from the database
 func GetOneItem(item MyModel) (MyModel, error) {
 	err := o.Read(item)
