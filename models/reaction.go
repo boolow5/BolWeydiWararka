@@ -23,6 +23,7 @@ func (this *Reaction) TableName() string {
 }
 
 func (this *Reaction) Valid() bool {
+	// UserId is should not be 0, but one of QuestionId, AnswerId or CommentId should not be 0
 	return (this.User.UserId != 0 && this.Question.QuestionId != 0) || (this.User.UserId != 0 && this.Answer.AnswerId != 0) || (this.User.UserId != 0 && this.Comment.CommentId != 0)
 }
 
@@ -85,5 +86,18 @@ func (this *Reaction) Update() (bool, error) {
 	}
 
 	fmt.Println("Updated successfully")
+	return true, nil
+}
+
+func (this *Reaction) Delete() (bool, error) {
+	if this.ReactionId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		return false, errors.New(err_message)
+	}
+
+	if deleted, err := DeleteItem(this); err != nil || !deleted {
+		return deleted, err
+	}
+
 	return true, nil
 }

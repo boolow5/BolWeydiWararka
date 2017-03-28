@@ -29,7 +29,7 @@ func init() {
 	orm.RegisterDriver("sqlite3", orm.DRSqlite)
 	orm.RegisterDataBase("default", "sqlite3", "data.db")
 
-	orm.RegisterModel(new(User), new(Profile), new(Question), new(Answer), new(Discussion), new(Topic))
+	orm.RegisterModel(new(User), new(Profile), new(Question), new(Answer), new(Discussion), new(Topic), new(Reaction), new(Comment))
 
 	if g.AUTO_MIGRATE {
 		name := "default"                          // Database alias.

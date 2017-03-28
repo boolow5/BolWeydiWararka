@@ -104,6 +104,30 @@ func GetTopicById(id int) (*Topic, error) {
 	return item, nil
 }
 
+func GetDiscussionById(id int) (*Discussion, error) {
+	item := &Discussion{DiscussionId: id}
+	if id < 1 {
+		return item, errors.New("Invalid discussion id")
+	}
+	err := o.Raw("SELECT * FROM discussion WHERE discussion_id = ? ", id).QueryRow(&item)
+	if err != nil {
+		return item, err
+	}
+	return item, nil
+}
+
+func GetReactionById(id int) (*Reaction, error) {
+	item := &Reaction{ReactionId: id}
+	if id < 1 {
+		return item, errors.New("Invalid reaction id")
+	}
+	err := o.Raw("SELECT * FROM reaction WHERE reaction_id = ? ", id).QueryRow(&item)
+	if err != nil {
+		return item, err
+	}
+	return item, nil
+}
+
 // GetOneItem fetchs a single item from the database
 func GetOneItem(item MyModel) (MyModel, error) {
 	err := o.Read(item)
