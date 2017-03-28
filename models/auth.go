@@ -20,6 +20,10 @@ type User struct {
 	UpdatedAt time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
 }
 
+func (this *User) TableName() string {
+	return "user"
+}
+
 type Profile struct {
 	ProfileId       int    `json:"profile_id" orm:"auto"`
 	User            *User  `json:"user" orm:"reverse(one)"`
@@ -29,4 +33,8 @@ type Profile struct {
 	AnswerCount     int    `json:"answer_count" `
 	QuestionCount   int    `json:"question_count" `
 	AnswerViewCount int    `json:"anwer_view_count" `
+}
+
+func (this *Profile) TableName() string {
+	return "profile"
 }

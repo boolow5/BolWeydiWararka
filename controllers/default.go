@@ -100,11 +100,11 @@ func DeleteUser(context *gin.Context) {
 		return
 	}
 	if !deleted {
-		data["message"] = "User not deleted"
+		data["error"] = "User not deleted"
 		context.JSON(200, data)
 		return
 	}
-	data["message"] = "User deleted successfully"
+	data["success"] = "deleted successfully"
 	context.JSON(200, data)
 }
 

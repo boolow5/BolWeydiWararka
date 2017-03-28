@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 
@@ -126,6 +127,12 @@ func (this *User) Authorize(role string) (bool, error) {
 	err, user := GetUserByUsername(this.Username)
 	if err != nil {
 		return false, err
+	}
+
+	fmt.Println("\n\nUser Role: ", user.Role)
+
+	if role == "*" {
+		return true, nil
 	}
 
 	if strings.ToLower(user.Role) != strings.ToLower(role) {

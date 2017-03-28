@@ -21,6 +21,10 @@ type Comment struct {
 	UpdatedAt time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
 }
 
+func (this *Comment) TableName() string {
+	return "comment"
+}
+
 func (this *Comment) Valid() bool {
 	if len(this.Text) > 0 {
 		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)

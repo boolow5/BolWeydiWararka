@@ -15,6 +15,10 @@ type Discussion struct {
 	ClosingDate  time.Time   `json:"closing_date" `
 }
 
+func (this *Discussion) TableName() string {
+	return "discussion"
+}
+
 func (this *Discussion) Valid() bool {
 	return len(this.Guests) != 0
 }

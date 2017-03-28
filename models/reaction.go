@@ -18,6 +18,10 @@ type Reaction struct {
 	UpdatedAt time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
 }
 
+func (this *Reaction) TableName() string {
+	return "reaction"
+}
+
 func (this *Reaction) Valid() bool {
 	return (this.User.UserId != 0 && this.Question.QuestionId != 0) || (this.User.UserId != 0 && this.Answer.AnswerId != 0) || (this.User.UserId != 0 && this.Comment.CommentId != 0)
 }

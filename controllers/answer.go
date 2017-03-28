@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/boolow5/BolWeydi/models"
@@ -11,11 +12,13 @@ func init() {
 
 }
 
-// AddQuestion creates new question
-func AddQuestion(context *gin.Context) {
-	question := models.Question{}
-	context.BindJSON(&question)
-	saved, err := question.Add()
+// AddAnswer creates new answer
+func AddAnswer(context *gin.Context) {
+	answer := models.Answer{}
+	context.BindJSON(&answer)
+	saved, err := answer.Add()
+	fmt.Println("\n\n")
+	fmt.Println(answer)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
@@ -27,34 +30,34 @@ func AddQuestion(context *gin.Context) {
 	context.JSON(200, gin.H{"success": "Saved successfully"})
 }
 
-func UpdateQuestion(context *gin.Context) {
-	id, got := context.GetQuery("question_id")
+func UpdateAnswer(context *gin.Context) {
+	id, got := context.GetQuery("answer_id")
 	if !got {
-		context.JSON(200, gin.H{"error": "missing question id"})
+		context.JSON(200, gin.H{"error": "missing answer id"})
 		return
 	}
-	questionId, err := strconv.Atoi(id)
+	answerId, err := strconv.Atoi(id)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
-	if questionId < 1 {
-		context.JSON(200, gin.H{"error": "invalid question id"})
+	if answerId < 1 {
+		context.JSON(200, gin.H{"error": "invalid answer id"})
 		return
 	}
 
-	question := &models.Question{QuestionId: questionId}
-	question, err = models.GetQuestionById(question.QuestionId)
+	answer := &models.Answer{AnswerId: answerId}
+	answer, err = models.GetAnswerById(answer.AnswerId)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
-	err = context.BindJSON(question)
+	err = context.BindJSON(answer)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
-	saved, err := question.Update()
+	saved, err := answer.Update()
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
@@ -66,29 +69,29 @@ func UpdateQuestion(context *gin.Context) {
 	context.JSON(200, gin.H{"success": "updated successfully"})
 }
 
-func DeleteQuestion(context *gin.Context) {
-	id, got := context.GetQuery("question_id")
+func DeleteAnswer(context *gin.Context) {
+	id, got := context.GetQuery("answer_id")
 	if !got {
-		context.JSON(200, gin.H{"error": "missing question id"})
+		context.JSON(200, gin.H{"error": "missing answer id"})
 		return
 	}
-	questionId, err := strconv.Atoi(id)
+	answerId, err := strconv.Atoi(id)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
-	if questionId < 1 {
-		context.JSON(200, gin.H{"error": "invalid question id"})
+	if answerId < 1 {
+		context.JSON(200, gin.H{"error": "invalid answer id"})
 		return
 	}
 
-	question := &models.Question{QuestionId: questionId}
-	question, err = models.GetQuestionById(question.QuestionId)
+	answer := &models.Answer{AnswerId: answerId}
+	answer, err = models.GetAnswerById(answer.AnswerId)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
 	}
-	deleted, err := question.Delete()
+	deleted, err := answer.Delete()
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return

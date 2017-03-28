@@ -29,6 +29,10 @@ func main() {
 		auth.POST("/question", controllers.AddQuestion)
 		auth.PUT("/question", controllers.UpdateQuestion)
 		auth.DELETE("/question", controllers.DeleteQuestion)
+
+		auth.POST("/answer", controllers.AddAnswer)
+		auth.PUT("/answer", controllers.UpdateAnswer)
+		auth.DELETE("/answer", controllers.DeleteAnswer)
 	}
 	router.POST("/user", controllers.AddUser)
 	router.POST("/login", jwtMiddleware.LoginHandler)

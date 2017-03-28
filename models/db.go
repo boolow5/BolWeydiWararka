@@ -68,11 +68,36 @@ func GetItems(itemArray []MyModel) []MyModel {
 	return itemArray
 }
 
-func GetQuestionById(item *Question) (*Question, error) {
-	if item.QuestionId < 1 {
+func GetQuestionById(id int) (*Question, error) {
+	item := &Question{QuestionId: id}
+	if id < 1 {
 		return item, errors.New("Invalid question id")
 	}
-	err := o.Read(item)
+	err := o.Raw("SELECT * FROM question WHERE question_id = ? ", id).QueryRow(&item)
+	if err != nil {
+		return item, err
+	}
+	return item, nil
+}
+
+func GetAnswerById(id int) (*Answer, error) {
+	item := &Answer{AnswerId: id}
+	if id < 1 {
+		return item, errors.New("Invalid answer id")
+	}
+	err := o.Raw("SELECT * FROM answer WHERE answer_id = ? ", id).QueryRow(&item)
+	if err != nil {
+		return item, err
+	}
+	return item, nil
+}
+
+func GetTopicById(id int) (*Topic, error) {
+	item := &Topic{TopicId: id}
+	if id < 1 {
+		return item, errors.New("Invalid topic id")
+	}
+	err := o.Raw("SELECT * FROM topic WHERE topic_id = ? ", id).QueryRow(&item)
 	if err != nil {
 		return item, err
 	}

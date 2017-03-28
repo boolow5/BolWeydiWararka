@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 	"time"
 )
@@ -16,6 +15,10 @@ type Topic struct {
 	Followers     []*User   `json:"followers" orm:"rel(m2m)"`
 	CreatedAt     time.Time `json:"created_at" orm:"auto_now_add;type(datetime)"`
 	UpdatedAt     time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
+}
+
+func (this *Topic) TableName() string {
+	return "topic"
 }
 
 func (this *Topic) Valid() bool {
@@ -51,17 +54,14 @@ func (this *Topic) Add() (bool, error) {
 }
 
 func (this *Topic) Update() (bool, error) {
-	fmt.Println("Updating Topic")
 	if this.TopicId < 1 {
 		err_message := "ZeroIDError: give a valid id, to update this item"
-		fmt.Println(err_message)
 		return false, errors.New(err_message)
 	}
 	this.UpdatedAt = time.Now()
 	oldItem := &Topic{TopicId: this.TopicId}
 	updated, err := UpdateItem(oldItem, this)
 	if err != nil {
-		fmt.Println(err)
 		return false, err
 	}
 
@@ -69,6 +69,18 @@ func (this *Topic) Update() (bool, error) {
 		return false, nil
 	}
 
-	fmt.Println("Updated successfully")
+	return true, nil
+}
+
+func (this *Topic) Delete() (bool, error) {
+	if this.TopicId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		return false, errors.New(err_message)
+	}
+
+	if deleted, err := DeleteItem(this); err != nil || !deleted {
+		return deleted, err
+	}
+
 	return true, nil
 }

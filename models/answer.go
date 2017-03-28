@@ -19,8 +19,12 @@ type Answer struct {
 	UpdatedAt time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
 }
 
+func (this *Answer) TableName() string {
+	return "answer"
+}
+
 func (this *Answer) Valid() bool {
-	return (this.Question.QuestionId != 0 && len(this.Text) > 2 && this.Author.UserId != 0)
+	return (this.Question.QuestionId > 0 && len(this.Text) > 1)
 }
 
 func (this *Answer) SetId(id int) {
@@ -49,10 +53,8 @@ func (this *Answer) Add() (bool, error) {
 }
 
 func (this *Answer) Update() (bool, error) {
-	fmt.Println("Updating answer")
 	if this.AnswerId < 1 {
 		err_message := "ZeroIDError: give a valid id, to update this item"
-		fmt.Println(err_message)
 		return false, errors.New(err_message)
 	}
 	this.UpdatedAt = time.Now()
@@ -60,7 +62,6 @@ func (this *Answer) Update() (bool, error) {
 	oldItem.Question = this.Question
 	updated, err := UpdateItem(oldItem, this)
 	if err != nil {
-		fmt.Println(err)
 		return false, err
 	}
 
@@ -68,6 +69,18 @@ func (this *Answer) Update() (bool, error) {
 		return false, nil
 	}
 
-	fmt.Println("Updated successfully")
+	return true, nil
+}
+
+func (this *Answer) Delete() (bool, error) {
+	if this.AnswerId < 1 {
+		err_message := "ZeroIDError: give a valid id, to update this item"
+		return false, errors.New(err_message)
+	}
+
+	if deleted, err := DeleteItem(this); err != nil || !deleted {
+		return deleted, err
+	}
+
 	return true, nil
 }

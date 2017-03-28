@@ -41,7 +41,7 @@ func MyAuthenticator(username string, password string, c *gin.Context) (string, 
 }
 func MyAuthorizor(userId string, c *gin.Context) bool {
 	user := models.User{Username: userId}
-	allow, err := user.Authorize("admin")
+	allow, err := user.Authorize("*")
 	if err != nil {
 		return false
 	}

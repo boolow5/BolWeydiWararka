@@ -23,6 +23,10 @@ type Question struct {
 	UpdatedAt time.Time `json:"updated_at" orm:"auto_now;type(datetime)"`
 }
 
+func (this *Question) TableName() string {
+	return "question"
+}
+
 func (this *Question) Valid() bool {
 	if len(this.Text) > 0 {
 		this.UniqueUrl = strings.Replace(this.Text, " ", "-", -1)
@@ -73,7 +77,6 @@ func (this *Question) Update() (bool, error) {
 		return false, nil
 	}
 
-	fmt.Println("Updated successfully")
 	return true, nil
 }
 
