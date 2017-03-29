@@ -26,6 +26,10 @@ func main() {
 		auth.DELETE("/user", controllers.DeleteUser)
 		//auth.POST("/auth", controllers.AuthenticateUser)
 
+		auth.POST("/discussion", controllers.AddDiscussion)
+		auth.PUT("/discussion", controllers.UpdateDiscussion)
+		auth.DELETE("/discussion", controllers.DeleteDiscussion)
+
 		auth.POST("/question", controllers.AddQuestion)
 		auth.PUT("/question", controllers.UpdateQuestion)
 		auth.DELETE("/question", controllers.DeleteQuestion)
