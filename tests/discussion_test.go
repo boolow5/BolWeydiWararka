@@ -7,7 +7,6 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/boolow5/BolWeydi/controllers"
 
@@ -28,8 +27,7 @@ func TestDiscussion(t *testing.T) {
 
 	g.Describe("AddDiscussion", func() {
 		// create request
-		theTime := fmt.Sprintf(`{"guests":[{"user_id":1}], "closing_date":"%v"}`, time.Now())
-		body := strings.NewReader(theTime)
+		body := strings.NewReader(`{"guests":[{"user_id":1}]}`)
 		req, err := http.NewRequest(http.MethodPost, "/discussion", body)
 
 		g.It("Should not have request error", func() {
@@ -40,7 +38,7 @@ func TestDiscussion(t *testing.T) {
 		// make the call
 		r.ServeHTTP(rec, req)
 		// check status
-		g.It("Should return 200 success code", func() {
+		g.It(fmt.Sprintf("Should return 200 success code = %d", rec.Code), func() {
 			g.Assert(rec.Code).Equal(200)
 		})
 		// Unmarshal the response body
@@ -48,10 +46,10 @@ func TestDiscussion(t *testing.T) {
 		json.Unmarshal(rec.Body.Bytes(), &responseJson)
 		// check response body
 		expected_data := "Saved successfully"
-		g.It("Should not return error", func() {
+		g.It(fmt.Sprintf("Should not return error, error = %v", responseJson["error"]), func() {
 			g.Assert(responseJson["error"]).Equal(nil)
 		})
-		g.It("Should return success", func() {
+		g.It(fmt.Sprintf("Should return success. Response = %v", responseJson), func() {
 			g.Assert(responseJson["success"] == nil).Equal(false)
 		})
 		g.It("Should return the expected message", func() {
