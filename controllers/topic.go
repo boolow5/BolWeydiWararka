@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/boolow5/BolWeydi/models"
@@ -17,8 +16,6 @@ func AddTopic(context *gin.Context) {
 	topic := models.Topic{}
 	context.BindJSON(&topic)
 	saved, err := topic.Add()
-	fmt.Println("\n\n")
-	fmt.Println(topic)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return

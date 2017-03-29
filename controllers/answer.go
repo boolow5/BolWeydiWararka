@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/boolow5/BolWeydi/models"
@@ -17,8 +16,6 @@ func AddAnswer(context *gin.Context) {
 	answer := models.Answer{}
 	context.BindJSON(&answer)
 	saved, err := answer.Add()
-	fmt.Println("\n\n")
-	fmt.Println(answer)
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
 		return
