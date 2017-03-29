@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"strconv"
+	"time"
 
 	"github.com/boolow5/BolWeydi/models"
 	"gopkg.in/gin-gonic/gin.v1"
@@ -14,7 +15,16 @@ func init() {
 // AddDiscussion creates new discussion
 func AddDiscussion(context *gin.Context) {
 	discussion := models.Discussion{}
-	context.BindJSON(&discussion)
+	err := context.BindJSON(&discussion)
+	if err != nil {
+		context.JSON(200, gin.H{"error": err.Error()})
+		return
+	}
+	discussion_days, _ := strconv.Atoi(context.Query("discussion_days"))
+	if discussion_days < 1 {
+		discussion_days = 7
+	}
+	discussion.ClosingDate = time.Now().AddDate(0, 0, discussion_days)
 	saved, err := discussion.Add()
 	if err != nil {
 		context.JSON(200, gin.H{"error": err.Error()})
