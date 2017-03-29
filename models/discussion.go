@@ -12,7 +12,7 @@ type Discussion struct {
 	Questions    []*Question `json:"questions" orm:"rel(m2m)"`
 	Topics       []*Topic    `json:"topics" orm:"rel(m2m)"`
 	OpeningDate  time.Time   `json:"opening_date" orm:"auto_now_add;type(datetime)"`
-	ClosingDate  time.Time   `json:"closing_date" `
+	ClosingDate  time.Time   `json:"closing_date" orm:"auto_now_add;type(datetime)"`
 }
 
 func (this *Discussion) TableName() string {
